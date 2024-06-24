@@ -1,9 +1,10 @@
-using Core.Models;
+using Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace Core.Controllers
+namespace Core.Areas.User.Controllers
 {
+    [Area("User")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
