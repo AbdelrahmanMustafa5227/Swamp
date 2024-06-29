@@ -5,9 +5,9 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{DF833413-4A72-419F-A03C-3E6EF6AE927F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{1C97E231-9126-4D36-8F29-B3D7CBB980D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_Models", "Models\_Models.csproj", "{1C97E231-9126-4D36-8F29-B3D7CBB980D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{7F84000D-D8F6-46DD-94DD-164B6106A908}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_DataAccess", "DataAccess\_DataAccess.csproj", "{7F84000D-D8F6-46DD-94DD-164B6106A908}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -20,3 +20,36 @@ html {
 body {
   margin-bottom: 60px;
 }
+.create-post {
+
+    width:50%;
+    margin:auto;
+    display:flex;
+    flex-direction:column;
+
+}
+.post-card {
+    width:50%;
+    margin: auto;
+    border: 2px black dashed;
+    margin-bottom: 1em;
+}
+
+.mayknow-con {
+    margin: auto 0;
+    background-color: white;
+    display: flex;
+    flex-direction: row;
+    border: 2px solid black;
+    justify-content: space-around;
+}
+.mayknow-body {
+    width: auto;
+    background-color:dimgray;
+    border: 2px solid black;
+    display: flex;
+    flex-direction: column;
+}
+.main-home {
+
+}

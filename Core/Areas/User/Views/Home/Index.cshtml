@@ -1,8 +1,33 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@model List<ApplicationUser>
+@inject SignInManager<IdentityUser> SignInManager
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="text-center main-home">
+    <h1 class="display-4">Welcome To Swamp!</h1>
+
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <h2>People You may know</h2>
+        <div class="mayknow-con">
+            @foreach (var item in Model)
+            {
+                <div class="mayknow-body">
+                    <h3>@item.Fullname</h3>
+                    <div class="image-container">
+                        <img class="profile-pic" src="@item.ProfilePicUrl" />
+                    </div>
+                    <a class="btn btn-primary mt-2" asp-action="Befriend" asp-route-id="@item.Id" >Add as a Friend</a>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <h2>Join Swamp Community Now !</h2>
+    }
+
+
 </div>

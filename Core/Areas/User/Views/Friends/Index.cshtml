@@ -1,0 +1,20 @@
+﻿@model List<User_Friend>
+
+<h1>Friends List</h1>
+<div class="card">
+    @foreach (var item in Model)
+    {
+        <div class="card-body">
+            <h2>@item.Friend.Fullname</h2>
+
+            <div class="image-container">
+                <img class="profile-pic" src="@item.Friend.ProfilePicUrl" />
+            </div>
+
+            <p> Friends Since : @item.FriendsSince</p>
+
+            <a class="btn btn-danger" asp-controller="Friends" asp-action="Remove" asp-route-id="@item.Friend.Id">Remove Friend</a>
+        </div>
+    }
+</div>
+

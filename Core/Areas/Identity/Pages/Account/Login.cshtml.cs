@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using DataAccess.Data;
 
 namespace Core.Areas.Identity.Pages.Account
 {
@@ -21,11 +22,13 @@ namespace Core.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly Context _db;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger , Context db)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _db = db;
         }
 
         /// <summary>
@@ -114,6 +117,7 @@ namespace Core.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    HttpContext.Session.SetString("IsLogged", _db.applicationUsers.FirstOrDefault(u=> u.Email == Input.Email).Fullname + " !");
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }

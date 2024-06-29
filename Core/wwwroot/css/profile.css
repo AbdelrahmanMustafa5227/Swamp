@@ -1,0 +1,37 @@
+.main {
+    display:flex;
+    flex-direction:row-reverse;
+    justify-content:space-between;
+    text-align:center;
+    
+}
+
+.profile {
+    width: 75%;
+    background-color: chocolate;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+.image-container {
+    margin-top:2em;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+.profile-pic {
+    margin: 0 auto;
+    height: 100%;
+    width: auto;
+}
+
+.side-profile {
+    width: 23%;
+    background-color: wheat;
+}
+
+.side-button {
+    width: 50%;
+    margin: 2em auto;
+}

@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using Models;
 
 namespace Core.Areas.Identity.Pages.Account
 {
@@ -29,13 +30,15 @@ namespace Core.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             IUserStore<IdentityUser> userStore,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IWebHostEnvironment webHostEnvironment)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -43,6 +46,7 @@ namespace Core.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         /// <summary>
@@ -97,6 +101,16 @@ namespace Core.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required]
+            public string Bio { get; set; }
+            [Required]
+            public DateOnly Birthdate {  get; set; }
+            [Required]
+            public string Fullname { get; set; }
+
+
+
         }
 
 
@@ -105,8 +119,8 @@ namespace Core.Areas.Identity.Pages.Account
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
-
-        public async Task<IActionResult> OnPostAsync(string returnUrl = null)
+        
+        public async Task<IActionResult> OnPostAsync(IFormFile? pic ,string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
@@ -116,6 +130,26 @@ namespace Core.Areas.Identity.Pages.Account
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+                user.Bio = Input.Bio;
+                user.BirthDate = Input.Birthdate;
+                user.Fullname = Input.Fullname;
+
+                //storing image in wwwroot
+                if (pic != null)
+                {
+                    string path = Path.Combine(_webHostEnvironment.WebRootPath, @"images\ProfilePics");
+                    using (var stream = new FileStream(Path.Combine(path, pic.FileName), FileMode.Create))
+                    {
+                        pic.CopyToAsync(stream);
+                    }
+                    user.ProfilePicUrl = @"\images\ProfilePics\" + pic.FileName;
+                }
+                else
+                {
+                    user.ProfilePicUrl = @"\images\ProfilePics\default.png";
+                }
+
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
@@ -154,11 +188,11 @@ namespace Core.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private IdentityUser CreateUser()
+        private ApplicationUser CreateUser()
         {
             try
             {
-                return Activator.CreateInstance<IdentityUser>();
+                return Activator.CreateInstance<ApplicationUser>();
             }
             catch
             {

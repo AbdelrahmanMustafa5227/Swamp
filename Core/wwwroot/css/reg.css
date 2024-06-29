@@ -1,0 +1,15 @@
+﻿body {
+    background-image: url("../images/Register/reg-background.jpg");
+    background-size: cover;
+}
+.first-card {
+    background-color:white;
+    padding:4px;
+
+}
+.reg-main {
+    margin-top : 5em;
+}
+.log-main {
+    margin-top: 2em;
+}
