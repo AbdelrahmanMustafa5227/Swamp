@@ -11,10 +11,14 @@ html {
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
-
+.footer-flex {
+    display:flex;
+    flex-direction:row;
+    justify-content:space-around;
+}
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
@@ -52,4 +56,185 @@ body {
 }
 .main-home {
 
+}
+.notification {
+    position: fixed;
+    right: 5em;
+    top: 5em;
+    z-index: 9;
+}
+.success {
+    position: relative;
+    padding: 10px;
+    width: 400px;
+    margin-bottom: 10px;
+    color: black;
+    display: grid;
+    grid-template-columns: 70px 1fr 70px;
+    border-radius: 9px;
+    font-size: 1rem;
+    --color: #0abf30;
+    background: white;
+    box-shadow: 5px 4px 3px black;
+    animation: show, disappear;
+    animation-duration: 0.3s, 0.3s;
+    animation-delay: 0s, 3s;
+    animation-fill-mode: forwards;
+}
+.success i {
+    color: var(--color);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:x-large;
+}
+
+.success .title {
+    font-size:x-large;
+    font-weight:bold;
+}
+@keyframes show {
+    0% {
+        transform:translateX(100%);
+    }
+    100% {
+        transform: translateX(-10%);
+    }
+}
+@keyframes disappear {
+    0% {
+        opacity:100%;
+    }
+
+    100% {
+        opacity: 0%;
+        display:none;
+    }
+}
+
+.pop-up {
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50% , -50%);
+    width:600px;
+    background-color:#f2f2f2;
+    text-align:center;
+    align-items:center;
+    padding:40px;
+    border: 1px solid #b3b3b3;
+    box-shadow: 0px 5px 10px rgba(0,0,0,0.2);
+    z-index:999;
+    opacity:0;
+    pointer-events:none;
+    transition: all .3s ease-in-out;
+}
+.pop-up i {
+    margin-top:-10px;
+    font-size:80px;
+    color: orangered;
+}
+.pop-up h1 {
+    font-size: 30px;
+    color: #1b2631;
+        
+}
+.pop-up label {
+    font-size: 23px;
+    color: #404040;
+}
+.pop-up .btns {
+    margin: 40px 0 0 0 ;
+}
+.btns .btn1, .btns .btn2 {
+    text-decoration: none;
+    background-color: #999999;
+    color: white;
+    font-size: 18px;
+    padding: 10px 30px;
+    border: 1px solid #808080;
+    border-radius:5px;
+}
+.btns .btn2 {
+    background-color:#ff3333;
+    margin-left: 20px;
+    border:1px solid #cc0000;
+}
+.btn1:hover {
+    transition:0.3s;
+    background-color:#8c8c8c;
+}
+
+.btn2:hover {
+    transition: 0.5s;
+    background-color: #e60000;
+}
+
+
+
+.link {
+    text-decoration:none;
+    color:black;
+}
+    .link:hover {
+        color:black;
+    }
+
+
+.side-bar {
+    position: fixed;
+    top: 10.2%;
+    left:0%;
+    width: 20%;
+    height: 39.5em;
+    background-color: white;
+    z-index: 998;
+    padding-top:0.5em;
+    border-right:1px solid rgb(200,200,200);
+}
+.side-bar a {
+    text-decoration: none;
+    color: black;
+}
+.side-button {
+    display: flex;
+    align-items: center;
+    width: 80%;
+    height: 3em;
+    margin: 1em auto;
+    border: 0px black solid;
+    border-radius: 10px;
+    box-shadow: 1px 1px 1px black;
+    font-family: "Radio Canada Big", sans-serif;
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
+    background-color: rgb(250,250,250);
+}
+
+    .side-button i {
+        width: 20%;
+        font-size: 1rem;
+        margin-right: 0.25em;
+    }
+.nav-bar {
+    width:100%;
+    height:4.5em;
+    display:flex;
+    position:fixed;
+    top:0%;
+    right:0%;
+    z-index:999;
+}
+.content {
+    width:80%;
+    padding-top:6em;
+}
+.main-body {
+    display:flex;
+
+}
+
+.footer-mine {
+    z-index:999;
 }

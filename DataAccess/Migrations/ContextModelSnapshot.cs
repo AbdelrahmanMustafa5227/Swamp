@@ -17,7 +17,7 @@ namespace _DataAccess.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.6")
+                .HasAnnotation("ProductVersion", "8.0.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -143,7 +143,7 @@ namespace _DataAccess.Migrations
 
                     b.ToTable("AspNetUsers", (string)null);
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
+                    b.HasDiscriminator().HasValue("IdentityUser");
 
                     b.UseTphMappingStrategy();
                 });
@@ -229,6 +229,69 @@ namespace _DataAccess.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("_Models.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Body")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("postId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("userId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("postId");
+
+                    b.HasIndex("userId");
+
+                    b.ToTable("comments");
+                });
+
+            modelBuilder.Entity("_Models.FriendRequest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("FromId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("SendDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ToId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FromId");
+
+                    b.HasIndex("ToId");
+
+                    b.ToTable("friendRequests");
+                });
+
             modelBuilder.Entity("_Models.Post", b =>
                 {
                     b.Property<int>("Id")
@@ -241,10 +304,7 @@ namespace _DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Dislikes")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Likes")
+                    b.Property<int>("Loves")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("PostDate")
@@ -265,7 +325,7 @@ namespace _DataAccess.Migrations
                     b.ToTable("posts");
                 });
 
-            modelBuilder.Entity("_Models.User_Friend", b =>
+            modelBuilder.Entity("_Models.RelationModels.User_Friend", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -293,9 +353,42 @@ namespace _DataAccess.Migrations
                     b.ToTable("user_Friends");
                 });
 
+            modelBuilder.Entity("_Models.RelationModels.User_Posts", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("postId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "postId");
+
+                    b.HasIndex("postId");
+
+                    b.ToTable("User_Posts");
+                });
+
+            modelBuilder.Entity("_Models.RelationModels.User_VoteUps", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("postId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "postId");
+
+                    b.HasIndex("postId");
+
+                    b.ToTable("User_VoteUps");
+                });
+
             modelBuilder.Entity("Models.ApplicationUser", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+                    b.Property<string>("BackgroundPicUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Bio")
                         .IsRequired()
@@ -307,6 +400,9 @@ namespace _DataAccess.Migrations
                     b.Property<string>("Fullname")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("ProfilePicMargin")
+                        .HasColumnType("float");
 
                     b.Property<string>("ProfilePicUrl")
                         .HasColumnType("nvarchar(max)");
@@ -365,6 +461,44 @@ namespace _DataAccess.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("_Models.Comment", b =>
+                {
+                    b.HasOne("_Models.Post", "post")
+                        .WithMany()
+                        .HasForeignKey("postId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("userId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+
+                    b.Navigation("post");
+                });
+
+            modelBuilder.Entity("_Models.FriendRequest", b =>
+                {
+                    b.HasOne("Models.ApplicationUser", "FromUser")
+                        .WithMany()
+                        .HasForeignKey("FromId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Models.ApplicationUser", "ToUser")
+                        .WithMany()
+                        .HasForeignKey("ToId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FromUser");
+
+                    b.Navigation("ToUser");
+                });
+
             modelBuilder.Entity("_Models.Post", b =>
                 {
                     b.HasOne("Models.ApplicationUser", "Poster")
@@ -376,7 +510,7 @@ namespace _DataAccess.Migrations
                     b.Navigation("Poster");
                 });
 
-            modelBuilder.Entity("_Models.User_Friend", b =>
+            modelBuilder.Entity("_Models.RelationModels.User_Friend", b =>
                 {
                     b.HasOne("Models.ApplicationUser", "Friend")
                         .WithMany("Users")
@@ -395,11 +529,60 @@ namespace _DataAccess.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("_Models.RelationModels.User_Posts", b =>
+                {
+                    b.HasOne("Models.ApplicationUser", "user")
+                        .WithMany("Saver")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("_Models.Post", "Post")
+                        .WithMany("postsSaved")
+                        .HasForeignKey("postId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Post");
+
+                    b.Navigation("user");
+                });
+
+            modelBuilder.Entity("_Models.RelationModels.User_VoteUps", b =>
+                {
+                    b.HasOne("Models.ApplicationUser", "user")
+                        .WithMany("Voters")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("_Models.Post", "Post")
+                        .WithMany("postsVotedUp")
+                        .HasForeignKey("postId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Post");
+
+                    b.Navigation("user");
+                });
+
+            modelBuilder.Entity("_Models.Post", b =>
+                {
+                    b.Navigation("postsSaved");
+
+                    b.Navigation("postsVotedUp");
+                });
+
             modelBuilder.Entity("Models.ApplicationUser", b =>
                 {
                     b.Navigation("Friends");
 
+                    b.Navigation("Saver");
+
                     b.Navigation("Users");
+
+                    b.Navigation("Voters");
                 });
 #pragma warning restore 612, 618
         }

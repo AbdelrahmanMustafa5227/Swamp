@@ -1,0 +1,18 @@
+﻿@if (TempData.ContainsKey("Success"))
+{
+    <div class="notification">
+        <div class="success">
+            <i class="bi bi-check-circle-fill"></i>
+            <div class="not-content">
+                <div class="title">Success</div>
+                <span>@TempData["Success"].ToString()</span>
+            </div>
+        </div>  
+    </div>
+}
+else
+{
+   
+}
+
+ 

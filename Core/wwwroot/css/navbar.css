@@ -1,0 +1,74 @@
+﻿body {
+    background-color: rgb(254, 252, 255);
+}
+.nav-icon {
+    font-size:1.5rem;
+    padding-bottom:0.6em;
+}
+    .nav-icon:hover {
+        color: rgb(142, 200, 61);
+        border-bottom: 3px solid rgb(142, 200, 61);
+    }
+.nav-image {
+}
+.nav-username {
+    margin-left: 5px;
+    font-family: "Cabin", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: bold;
+    font-style: normal;
+    font-size: 1.1rem;
+    color: rgb(39, 52, 68);
+}
+.nav-logo {
+    width:40px;
+}
+
+.nav-lnk {
+    text-decoration: none;
+    color: black;
+    margin: 0em 1em;
+    font-family: "Cabin", sans-serif;
+    font-weight: bold;
+    font-style: normal;
+    font-size: 1.3rem;
+    transition: ease-in 0.2s;
+}
+    .nav-lnk:hover {
+        color: rgb(142, 200, 61);
+        border-bottom: solid 2px rgb(142, 200, 61);
+    }
+.nav-ul {
+    margin-top:1em;
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.nav-container {
+    display: flex;
+    justify-content: space-around;
+    align-items:center;
+}
+.nav-nav{
+    display:flex;
+    justify-content:space-around;
+}
+
+.nav-srch {
+    width: 20em;
+    height: 2em;
+    padding-left: 1em;
+    text-align: left;
+    outline-color: black;
+    border-radius: 20px;
+}
+    .nav-srch:focus {
+        outline: none !important;
+        border: 1px solid rgb(142, 200, 61);
+        box-shadow: 0 0 10px rgb(142, 200, 61);
+    }
+input::-webkit-input-placeholder {
+    padding-left:1em;
+    text-align: left;
+}

@@ -1,0 +1,24 @@
+﻿
+@{
+    Layout = "_Layoutout";
+}
+
+<div class="edit-info mb-5">
+    <h3>Recover Password</h3>
+
+    <form method="post" asp-action="_ForgetPass" class="edit-form">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="edit-entry">
+            <label>Email</label>
+            <input name="email" class="form-control" type="text" />
+        </div>
+        <div class="edit-entry">
+            <label>BirthDate</label>
+            <input name="date" class="form-control"  type="date" />
+        </div>
+
+        <input type="submit" class="edit-btn" />
+    </form>
+    
+</div>
+<br />

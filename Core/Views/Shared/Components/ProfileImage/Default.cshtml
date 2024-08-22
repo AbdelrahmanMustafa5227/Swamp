@@ -1,0 +1,26 @@
+﻿@using _Utilities
+@model ApplicationUser
+@inject IWebHostEnvironment web
+
+@{
+    double picSize = 50;
+    string path = SD.ProImgPath + Model.ProfilePicUrl;
+    double? margin = Model.ProfilePicMargin;
+    string fullImagePath = System.IO.Path.Combine(web.WebRootPath, path.Substring(1));
+    (double DifferenceInPixels, bool isLandscape) = ImgCalculations.GetDifferenceForAdjust(fullImagePath, picSize);
+    string s = string.Concat((-(DifferenceInPixels) * margin / 100).ToString(), "px");
+}
+
+
+@if (isLandscape)
+{
+    <div style="height:@(picSize.ToString() + "px"); width:@(picSize.ToString() + "px"); border-radius:50%; overflow:clip; float:left; clear:both;">
+        <img style="margin-left:@s; height:100%; width:auto;" src="@path" />
+    </div>
+}
+else
+{
+    <div style="height:@(picSize.ToString() + "px"); width:@(picSize.ToString() + "px"); border-radius:50%; overflow:clip; float:left; clear:both;">
+        <img style="margin:@s auto; height:auto; width:100%;" src="@path" />
+    </div>
+}

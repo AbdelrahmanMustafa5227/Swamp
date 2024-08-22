@@ -1,0 +1,19 @@
+﻿@{
+    Layout = "_Layoutout";
+}
+
+<div class="edit-info mb-5">
+    <h3>Enter a New Password</h3>
+
+    <form method="post" asp-action="_RecoverPass" class="edit-form">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="edit-entry">
+            <label>Password</label>
+            <input name="pass" class="form-control" type="text" />
+        </div>
+
+        <input type="submit" class="edit-btn" />
+    </form>
+
+</div>
+<br />

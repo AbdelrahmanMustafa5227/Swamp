@@ -1,0 +1,23 @@
+﻿@model ApplicationUser
+
+<partial src="_Notification"></partial>
+
+<div class="edit-info">
+    <h3>Edit Your Informations</h3>
+
+    <form method="post" asp-action="EditInfo" class="edit-form">
+        <div class="edit-entry">
+            <label asp-for="Fullname"></label>
+            <input class="form-control" asp-for="Fullname" type="text" />
+        </div>
+        <div class="edit-entry">
+            <label asp-for="Bio"></label>
+            <input class="form-control" asp-for="Bio" type="text" />
+        </div>
+        <div class="edit-entry">
+            <label asp-for="Email"></label>
+            <input class="form-control" asp-for="Email" type="text" />
+        </div>
+        <input type="submit" class="edit-btn" />
+    </form>
+</div>

@@ -1,0 +1,23 @@
+﻿@model Post;
+
+
+<div class="create-post">
+    <h2 style="margin-left:2em;">Edit Post</h2>
+    <div class="inner-create-post">
+        <form method="post" asp-action="_EditPost" style="width:90%;">
+            <input asp-for="Id" hidden />
+            <input asp-for="userId" hidden />
+            <input asp-for="PostDate " hidden />
+            <input asp-for="Loves" hidden/>
+
+            <label class="input-id">Title</label>
+            <input asp-for="Title" id="postTitle" class="post-create-title" type="text" placeholder="Post Title..." />
+            <label class="input-id">Body</label>
+            <textarea asp-for="Body" id="postBody" class="post-create-body">@Model.Body; </textarea>
+
+            <button type="submit" class="btn btn-success mb-5 post-create-submit">Edit</button>
+        </form>
+
+    </div>
+   
+</div>

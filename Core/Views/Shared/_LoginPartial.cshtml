@@ -2,27 +2,53 @@
 
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
-@inject IHttpContextAccessor Accessor
+@inject IUserService user;
 
-<ul class="navbar-nav">
-@if (SignInManager.IsSignedIn(User))
-{
-    <li class="nav-item UserManager.GetUserName(User)!">
-            <label id="manage" class="nav-link text-dark" title="Manage">Hello @Accessor.HttpContext.Session.GetString("IsLogged")</label> 
-    </li>
-    <li class="nav-item">
-        <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button id="logout" type="submit" class="nav-link btn btn-link text-dark border-0">Logout</button>
-        </form>
-    </li>
-}
-else
-{
-    <li class="nav-item">
-        <a class="nav-link text-dark" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
-    </li>
-}
+
+<ul class="navbar-nav flex-grow-1" style="min-width:12em; display:flex; flex-direction:row;">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <div class="nav-nav" style="width:37em;">
+            <div class="nav-container" style="width:10em;">
+        <li>
+            <a class="nav-link text-dark" asp-area="User" asp-controller="Friends" asp-action="Index">
+                <i class="bi bi-person nav-icon"></i>
+            </a>
+        </li>
+        <li>
+            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">
+                <i class="bi bi-bell nav-icon"></i>
+            </a>
+        </li>
+        <li>
+            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">
+                <i class="bi bi-envelope nav-icon"></i>
+            </a>
+        </li>
+        </div>
+
+        <div class="nav-container">
+        <li>
+            <a asp-area="User" asp-controller="Profile" asp-action="Index">@await Component.InvokeAsync("ProfileImage");</a>
+        </li>
+        
+
+        <li class="nav-item">
+            <form id="logoutForm" class="form-inline " asp-area="Identity" asp-controller="Account" asp-action="Logouts">
+                <button id="logout" type="submit" class=" btn btn-danger text-white ms-5">Logout</button>
+            </form>
+        </li>
+        </div>
+        </div>
+
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class=" text-white btn btn-success ms-3" id="login22" asp-area="Identity" asp-controller="Account" asp-action="Registers">Register</a>
+        </li>
+        <li class="nav-item">
+            <a class=" text-white btn btn-primary ms-3" id="login33" asp-area="Identity" asp-controller="Account" asp-action="Logins">Login</a>
+        </li>
+    }
 </ul>

@@ -1,0 +1,51 @@
+﻿@using System.Drawing;
+@using _Utilities
+@inject IWebHostEnvironment web;
+@model ApplicationUser
+
+@{
+    string path = SD.ProImgPath + @Model.ProfilePicUrl;
+    string fullImagePath = System.IO.Path.Combine(web.WebRootPath, path.Substring(1));
+    (double DifferenceInPixels, bool isLandscape) = ImgCalculations.GetDifferenceForAdjust(fullImagePath, 400);
+    string y = string.Concat((DifferenceInPixels + 400).ToString(),"px");
+}
+<h4 class="change-pic-title">Change Profile Picure</h4>
+<label class="change-pic-or">OR</label>
+
+<div class="change-pro-pic-container">
+
+    <div class="default-pic-main">
+        <h5 class="mb-3">Choose one of the Default Profile Pictures !</h5>
+        
+        <div class="default-pic-container">
+
+            @for (int i = 1; i <= 8; i++)
+            {
+                <div href="#" class="default-pic-entry" onclick="AssignDefaultPic(@i)">
+                    @{
+                        string imgpath = "/images/ProfilePics/default/default" + i.ToString() + ".png";
+                        string x = System.IO.Path.Combine( web.WebRootPath , imgpath );
+                    }
+                    <img class="default-pic" src=@x>
+                </div>
+            }
+ 
+        </div>
+    </div>
+
+
+    <div class="upload-pic">
+        <h5 class="mb-3">Upload one from your Computer !</h5>
+        <div class="upload-pic-container" >
+            <input type="file" id="upload-propic" hidden />
+            <i id="upload-propic-btn" class="bi bi-cloud-upload"></i>
+            <label>Upload</label>
+        </div>
+        
+    </div>
+
+
+
+</div>
+
+<script src="~/js/UploadProfilePicture.js"></script>

@@ -1,0 +1,28 @@
+﻿.home-background {
+    width: 90%;
+    height: 34.95em;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    .home-background img {
+        width: 510px;
+        height: 420px;
+    }
+
+.home-text-contanier {
+    width: 50%;
+}
+
+    .home-text-contanier h1 {
+        font-family: "New Amsterdam", sans-serif;
+        font-weight: 400;
+    }
+
+    .home-text-contanier h5 {
+        font-family: "New Amsterdam", sans-serif;
+        font-weight: 100;
+        font-size: 1.3rem;
+    }

@@ -1,20 +1,175 @@
-﻿@model List<User_Friend>
+﻿@model FriendsVM
+@using System.Drawing;
+@using _Utilities
+@inject IWebHostEnvironment web;
+<partial name="_Notification"></partial>
+<partial name="_Alert"></partial>
 
-<h1>Friends List</h1>
-<div class="card">
-    @foreach (var item in Model)
+
+<div class="friends-main blur">
+
+    @if (Model.ReceivedRequests.Count() != 0)
     {
-        <div class="card-body">
-            <h2>@item.Friend.Fullname</h2>
+        <h2 class="friend-section">Recieved Friend Requests</h2>
+        <div class="friend-subtitle">See Who wants to connect with You ! Review and Respond to incoming friend requests</div>
+        <div class="friend-container">
+            @foreach (var item in Model.ReceivedRequests)
+            {
+                <div class="friend-entry">
+                    @{
+                        string path = SD.ProImgPath + item.FromUser.ProfilePicUrl;
+                        double? margin = item.FromUser.ProfilePicMargin;
+                        string fullImagePath = System.IO.Path.Combine(web.WebRootPath, path.Substring(1));
+                        (double DifferenceInPixels, bool isLandscape) = ImgCalculations.GetDifferenceForAdjust(fullImagePath, 90);
+                        string s = string.Concat((-(DifferenceInPixels) * margin / 100).ToString(), "px");
+                    }
+                    <div class="friends-pro-img">
+                        @if (isLandscape)
+                        {
+                            <img class="asd" style="margin:auto @s; height:100%; width:auto;" src=@path />
+                        }
+                        else
+                        {
+                            <img class="asd" style="margin:@s auto; height:auto; width:100%;" src=@path />
+                        }
+                    </div>
+                    <h6>@item.FromUser.Fullname</h6>
+                    <div>
+                        <a class="btn btn-primary mt-2" asp-action="AcceptFriendRequest" asp-route-id="@item.FromId" asp-route-name="@item.FromUser.Fullname">Accept</a>
+                        <a class="btn btn-danger mt-2" asp-action="DenyFriendRequest" asp-route-id="@item.FromId">Deny</a>
+                    </div>
 
-            <div class="image-container">
-                <img class="profile-pic" src="@item.Friend.ProfilePicUrl" />
-            </div>
-
-            <p> Friends Since : @item.FriendsSince</p>
-
-            <a class="btn btn-danger" asp-controller="Friends" asp-action="Remove" asp-route-id="@item.Friend.Id">Remove Friend</a>
+                </div>
+            }
         </div>
     }
-</div>
 
+    @* ---------------------------------------------------------------------------------*@
+
+    @if (Model.PendingRequests.Count() != 0)
+    {
+        <h2 class="friend-section">Pending Invitations</h2>
+        <div class="friend-subtitle">Track the friend requests you sent ! see who hasn't responded yet and manage you invitations</div>
+        <div class="friend-container">
+
+            @foreach (var item in Model.PendingRequests)
+            {
+                <div class="friend-entry">
+                    @{
+                        string path = SD.ProImgPath + item.ToUser.ProfilePicUrl;
+                        double? margin = item.ToUser.ProfilePicMargin;
+                        string fullImagePath = System.IO.Path.Combine(web.WebRootPath, path.Substring(1));
+                        (double DifferenceInPixels, bool isLandscape) = ImgCalculations.GetDifferenceForAdjust(fullImagePath, 90);
+                        string s = string.Concat((-(DifferenceInPixels) * margin / 100).ToString(), "px");
+                    }
+                    <div class="friends-pro-img">
+                        @if (isLandscape)
+                        {
+                            <img class="asd" style="margin:auto @s; height:100%; width:auto;" src=@path />
+                        }
+                        else
+                        {
+                            <img class="asd" style="margin:@s auto; height:auto; width:100%;" src=@path />
+                        }
+                    </div>
+                    <h6>@item.ToUser.Fullname</h6>
+                    <a class="btn btn-danger mt-2" asp-action="CancelFriendRequest" asp-route-id="@item.ToId">Cancel Request</a>
+                </div>
+
+            }
+        </div>
+    }
+
+    @* ---------------------------------------------------------------------------------*@
+    <h2 class="friend-section">Friends List</h2>
+    <div class="friend-subtitle">List of all the People you followed so Far!</div>
+    @if (Model.Friends.Count() == 0)
+    {
+        <br />
+        <div class="friend-subtitle" style="padding-left:11em; margin:2em 0;">It's so lonely here. Get to know more people :)</div>
+    }
+    else
+    {
+        <div class="friend-container">
+
+            @foreach (var item in Model.Friends)
+            {
+                <div class="friend-entry">
+
+                    @{
+                        string path = SD.ProImgPath + item.Friend.ProfilePicUrl;
+                        double? margin = item.Friend.ProfilePicMargin;
+                        string fullImagePath = System.IO.Path.Combine(web.WebRootPath, path.Substring(1));
+                        (double DifferenceInPixels, bool isLandscape) = ImgCalculations.GetDifferenceForAdjust(fullImagePath, 90);
+                        string s = string.Concat((-(DifferenceInPixels) * margin / 100).ToString(), "px");
+                    }
+                    <div class="friends-pro-img">
+                        @if (isLandscape)
+                        {
+                            <img class="asd" style="margin:auto @s; height:100%; width:auto;" src=@path />
+                        }
+                        else
+                        {
+                            <img class="asd" style="margin:@s auto; height:auto; width:100%;" src=@path />
+                        }
+                    </div>
+                    <a class="friend-link-name" asp-controller="Friends" asp-action="ViewFriend" asp-route-id="@item.Friend.Id">
+                        <h6>@item.Friend.Fullname</h6>
+                    </a>
+                    <div>
+                        <a class="btn btn-primary" href="#">Message</a>
+                        <a onclick="javascript:check(this)" data-fId="@item.Friend.Id" class="btn btn-danger xyz">Unfriend</a>
+                    </div>
+
+
+                </div>
+            }
+        </div>
+    }
+
+
+
+
+    <br />
+
+
+
+
+    <h2 class="friend-section">People You may Know</h2>
+    <div class="friend-subtitle">It's always a Good time to make new Connections</div>
+    <div class="people-container">
+
+
+        @foreach (var item in Model.PeopleYouMayKnow)
+        {
+            <div class="people-entry">
+                @{
+                    string path = SD.ProImgPath + item.ProfilePicUrl;
+                    double? margin = item.ProfilePicMargin;
+                    string fullImagePath = System.IO.Path.Combine(web.WebRootPath, path.Substring(1));
+                    (double DifferenceInPixels, bool isLandscape) = ImgCalculations.GetDifferenceForAdjust(fullImagePath, 150);
+                    string s = string.Concat((-(DifferenceInPixels) * margin / 100).ToString(), "px");
+                }
+                <div class="people-pro-img">
+                    @if (isLandscape)
+                    {
+                        <img class="asd" style="margin:auto @s; height:100%; width:auto;" src=@path />
+                    }
+                    else
+                    {
+                        <img class="asd" style="margin:@s auto; height:auto; width:100%;" src=@path />
+                    }
+                </div>
+                <div class="people-info">
+                    <h6>@item.Fullname</h6>
+                    <a id="add-friend" class="btn btn-primary mt-2" asp-action="SendFriendRequest" asp-route-id="@item.Id">Add as a Friend</a>
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+
+
+</div>

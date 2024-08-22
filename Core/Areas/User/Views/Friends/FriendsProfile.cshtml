@@ -1,0 +1,159 @@
+﻿@model ProfileVM
+@using System.Drawing;
+@using _Utilities
+@inject IWebHostEnvironment web;
+
+<partial name="_Notification"></partial>
+
+
+<div class="main">
+    
+    <div class="profile" style="width:90%; margin:0 auto;">
+
+        <div class="back-image-con">
+            <img class="back-image" src=@(SD.backImgPath + Model.user.BackgroundPicUrl) />
+        </div>
+
+        @{
+            ViewData["picSize"] = 200;
+        }
+        <div class="image-container">
+            <partial name="_CircularProfilePic" model="@Model.user" view-data="ViewData"></partial>
+        </div>
+        
+        
+        <div class="info">
+            <h2>@Model.user.Fullname</h2>
+            <p>@Model.user.Bio</p>
+            <div style="display:flex;justify-content:space-between; width:12em;">
+                <a asp-controller="Home" asp-action="ChatRoom" class="btn btn-primary">Message</a>
+                <a asp-action="RemoveFromFriends" asp-route-id="@Model.user.Id" class="btn btn-danger">Unfriend</a>
+            </div>
+            
+        </div>
+
+
+
+        <div class="post-history">
+
+            @if (Model.posts.Count() == 0)
+            {
+                <div class="post-card">
+                    <label>@Model.user.Fullname Haven't Posted Anything Yet !</label><br />
+                </div>
+            }
+            else
+            {
+                @foreach (PostVM postvm in Model.posts)
+                {
+                    int c = postvm.comments.Count > 3 ? 2 : postvm.comments.Count - 1;
+
+                    <div class="post">
+                        <div class="poster-details">
+                            <div class="img-name-time ">
+
+                                @{
+                                    ViewData["picSize"] = 70;
+                                }
+                                <partial name="_CircularProfilePic" model="@postvm.post.Poster" view-data="ViewData"></partial>
+
+                                <div class="name-time">
+                                    <a class="link" asp-controller="Friends" asp-action="ViewFriend" asp-route-id="@postvm.post.Poster.Id">
+                                        <label class="name">@postvm.post.Poster.Fullname</label>
+                                    </a>
+                                    <label class="dt">@DateCalculations.CalculateDifference(postvm.post.PostDate)</label>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <h4>@postvm.post.Title</h4>
+                        <p>@postvm.post.Body</p><br />
+
+                        <div class="post-details">
+                            <div class="post-data">
+                                @if (!Model.voteUps.Contains(postvm.post.Id))
+                                {
+                                    <a class="post-like post-btn">
+                                        <i href="#" onclick="Like(@postvm.post.Id)" class="bi bi-heart"></i> @postvm.post.Loves
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a class="post-like post-btn">
+                                        <i href="#" onclick="Dislike(@postvm.post.Id)" class="bi bi-heart-fill" style="color:red;"></i> @postvm.post.Loves
+                                    </a>
+                                }
+
+                                <div class="post-like"> <i class="bi bi-chat-dots"></i> @postvm.comments.Count</div>
+                            </div>
+                            @if (!Model.savedPosts.Contains(postvm.post.Id))
+                            {
+                                <a class="post-like post-btn">
+                                    <i href="#" onclick="AddToBookmarks(@postvm.post.Id)" class="bi bi-bookmark"></i>
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="post-like post-btn">
+                                    <i href="#" onclick="RemoveFromBookmarks(@postvm.post.Id)" class="bi bi-bookmark-fill" style="color:darkorange;"></i>
+                                </a>
+                            }
+
+                        </div>
+                        <div class="comment-container">
+
+                            <div class="add-comment">
+                                @{
+                                    ViewData["picSize"] = 50;
+                                }
+                                <partial name="_CircularProfilePic" model="@Model.pro" view-data="ViewData"></partial>
+
+                                <input id="@postvm.post.Id" type="text" placeholder="Add Comment ..." />
+                                <a style="cursor:pointer;" onclick="AddComment(@postvm.post.Id)">Comment</a>
+                            </div>
+
+                            <div class="comment-history">
+                                @for (int i = 0; i <= c; i++)
+                                {
+                                    <div class="comment-entry">
+                                        @{
+                                            ViewData["picSize"] = 50;
+                                        }
+                                        <partial name="_CircularProfilePic" model="@postvm.comments[i].User" view-data="ViewData"></partial>
+
+                                        <div class="name-comment">
+                                            <a class="link" asp-controller="Friends" asp-action="ViewFriend" asp-route-id="@postvm.comments[i].User.Id">
+                                                <label style="font-weight:bold;" class="name">@postvm.comments[i].User.Fullname</label>
+                                            </a>
+                                            <label class="comment-body">@postvm.comments[i].Body</label>
+                                        </div>
+                                    </div>
+                                }
+                                @if (postvm.comments.Count > 3)
+                                {
+                                    <div class="comment-entry" style="margin-right:1em; margin-top:1em;">
+                                        <a class="link" asp-controller="Posts" asp-action="Index" asp-route-id="@postvm.post.Id">Show All Comments</a>
+                                    </div>
+                                }
+
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                }
+            }
+
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="~/js/UploadBackgroundImage.js"></script>
+<script src="/js/CreatePost.js"></script>
+<script src="~/js/Posts.js"></script>

@@ -1,0 +1,101 @@
+﻿@model HomeVM
+@using _Utilities;
+@inject IWebHostEnvironment web;
+
+<div class="home-posts-container">
+    @foreach (PostVM postvm in Model.posts)
+    {
+        int c = postvm.comments.Count > 3 ? 2 : postvm.comments.Count - 1;
+
+        <div class="post">
+            <div class="poster-details">
+                <div class="img-name-time ">
+
+                    @{
+                        ViewData["picSize"] = 70;
+                    }
+                    <partial name="_CircularProfilePic" model="@postvm.post.Poster" view-data="ViewData"></partial>
+
+                    <div class="name-time">
+                        <a class="link" asp-controller="Friends" asp-action="ViewFriend" asp-route-id="@postvm.post.Poster.Id">
+                            <label class="name">@postvm.post.Poster.Fullname</label>
+                        </a>
+                        <label class="dt">@DateCalculations.CalculateDifference(postvm.post.PostDate)</label>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <h4>@postvm.post.Title</h4>
+            <p>@postvm.post.Body</p><br />
+
+            <div class="post-details">
+                <div class="post-data">
+                    @if (!Model.voteUps.Contains(postvm.post.Id))
+                    {
+                        <a class="post-like post-btn">
+                            <i href="#" onclick="Like(@postvm.post.Id)" class="bi bi-heart"></i> @postvm.post.Loves
+                        </a>
+                    }
+                    else
+                    {
+                        <a class="post-like post-btn">
+                            <i href="#" onclick="Dislike(@postvm.post.Id)" class="bi bi-heart-fill" style="color:red;"></i> @postvm.post.Loves
+                        </a>
+                    }
+
+                    <div class="post-like"> <i class="bi bi-chat-dots"></i> @postvm.comments.Count</div>
+                </div>
+
+                    <a class="post-like post-btn">
+                        <i href="#" onclick="RemoveFromBookmarks(@postvm.post.Id)" class="bi bi-bookmark-fill" style="color:darkorange;"></i>
+                    </a>
+
+            </div>
+            <div class="comment-container">
+
+                <div class="add-comment">
+                    @{
+                        ViewData["picSize"] = 50;
+                    }
+                    <partial name="_CircularProfilePic" model="@Model.user" view-data="ViewData"></partial>
+
+                    <input id="@postvm.post.Id" type="text" placeholder="Add Comment ..." />
+                    <a style="cursor:pointer;" onclick="AddComment(@postvm.post.Id)">Comment</a>
+                </div>
+
+                <div class="comment-history">
+                    @for (int i = 0; i <= c; i++)
+                    {
+                        <div class="comment-entry">
+                            @{
+                                ViewData["picSize"] = 50;
+                            }
+                            <partial name="_CircularProfilePic" model="@postvm.comments[i].User" view-data="ViewData"></partial>
+
+                            <div class="name-comment">
+                                <a class="link" asp-controller="Friends" asp-action="ViewFriend" asp-route-id="@postvm.comments[i].User.Id">
+                                    <label style="font-weight:bold;" class="name">@postvm.comments[i].User.Fullname</label>
+                                </a>
+                                <label class="comment-body">@postvm.comments[i].Body</label>
+                            </div>
+                        </div>
+                    }
+                    @if (postvm.comments.Count > 3)
+                    {
+                        <div class="comment-entry" style="margin-right:1em; margin-top:1em;">
+                            <a class="link" asp-controller="Posts" asp-action="Index" asp-route-id="@postvm.post.Id">Show All Comments</a>
+                        </div>
+                    }
+
+                </div>
+
+
+            </div>
+
+        </div>
+    }
+</div>
+
+<script src="/js/Posts.js"></script>

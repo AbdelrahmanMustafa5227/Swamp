@@ -1,68 +1,196 @@
 ﻿@model ProfileVM
+@using System.Drawing;
+@using _Utilities
+@inject IWebHostEnvironment web;
+
+<partial name="_Notification"></partial>
+
 <div class="main">
-
+    
     <div class="profile">
+
+        <div class="back-image-con">
+            <a id="upload-link">
+                <div class="back-image-edit">
+                    <i class="bi bi-pencil back-image-edit-icon"></i>
+                </div>
+            </a>
+            <input type="file" id="upload-photo" />
+            <img class="back-image" src=@(SD.backImgPath + Model.user.BackgroundPicUrl) />
+        </div>
+
+        @{ ViewData["picSize"] = 200; }
         <div class="image-container">
-            <img class="profile-pic" src="@Model.user.ProfilePicUrl">
+            <partial name="_CircularProfilePic" model="@Model.user" view-data="ViewData"></partial>
         </div>
-        <h2>@Model.user.Fullname</h2>
-        <p>@Model.user.Bio</p>
-        <button>Edit Your Information</button><br /><br />
 
-        <div class="bg-light">
-            <h2>What's On your Mind</h2>
-
-            <form method="post">
-                <div class="create-post">
-                    <input asp-for="newpost.Id" hidden />
-                    <h2>Create Post</h2>
-                    <label>Post Title</label>
-                    <input asp-for="newpost.Title" type="text" />
-                    <label>Post Body</label>
-                    <input asp-for="newpost.Body" type="text" />
-                    <button type="submit">Create</button>
-                </div>
-            </form>
-        </div>
-        
-
-        <h2>Your Posts</h2>
-
-        @if (Model.postsHistory.Count() == 0)
-        {
-            <div class="post-card">
-                <label>You Haven't Posted Anything Yet !</label><br />
-                
+        <a asp-action="ChangePic" asp-route-id="@Model.user.Id">
+            <div class="profile-image-edit">
+                <i class="bi bi-pencil profile-image-edit-icon"></i>
             </div>
-        }
-        else
-        {
-            @foreach (Post post in Model.postsHistory)
+        </a>
+        <div class="info">
+            <h2>@Model.user.Fullname</h2>
+            <p>@Model.user.Bio</p>
+        </div>
+
+        <div class="create-post">
+            <h4>What Do you have in Mind ?</h4>
+            <div class="inner-create-post">
+                <label class="input-id">Title</label>
+                <input id="postTitle" class="post-create-title" type="text" placeholder="Post Title..." />
+                <label class="input-id">Body</label>
+                <textarea id="postBody" class="post-create-body">
+
+                </textarea>
+
+            </div>
+            <a id="createPostBtn" class="btn btn-success mb-5 post-create-submit">Create a New Post</a>
+        </div>
+
+        <div class="post-history">
+            <h4>Your Posts</h4>
+            @if (Model.posts.Count() == 0)
             {
-
-
                 <div class="post-card">
-                    <label>@post.Title</label><br />
-                    <label>@post.Body</label><br />
-                    <label> Likes : @post.Likes</label>
-                    <label>Dislikes : @post.Dislikes</label><br />
-                    <label>Posted on : @post.PostDate</label>
+                    <label>You Haven't Posted Anything Yet !</label><br />
                 </div>
-
-
             }
-        }
-        
-    </div>
+            else
+            {
+                @foreach (PostVM postvm in Model.posts)
+                {
+
+                    int c = postvm.comments.Count > 3 ? 2 : postvm.comments.Count - 1;
+
+                    <div class="post">
+                        <div class="poster-details">
+                            <div class="img-name-time ">
+
+                                @{
+                                    ViewData["picSize"] = 70;
+                                }
+                                <partial name="_CircularProfilePic" model="@postvm.post.Poster" view-data="ViewData"></partial>
+
+                                <div class="name-time">
+                                    <a class="link" asp-controller="Friends" asp-action="ViewFriend" asp-route-id="@postvm.post.Poster.Id">
+                                        <label class="name">@postvm.post.Poster.Fullname</label>
+                                    </a>
+                                    <label class="dt">@DateCalculations.CalculateDifference(postvm.post.PostDate)</label>
+                                </div>
+
+                            </div>
+                            <i style="cursor:pointer;" onclick="show(@postvm.post.Id)" class="bi bi-three-dots"></i>
+                        </div>
+                        <ul class="dropdown hide" id="@postvm.post.Id">
+                            <li> <a class="link" asp-controller="Posts" asp-action="EditPost" asp-route-id="@postvm.post.Id"> <i class="bi bi-pencil-fill"></i> Edit </a> </li>
+                            <li> <a class="link" asp-controller="Posts" asp-action="DeletePost" asp-route-id="@postvm.post.Id"> <i class="bi bi-trash-fill"></i> Delete</a> </li>
+                        </ul>
+                        <h4>@postvm.post.Title</h4>
+                        <p>@postvm.post.Body</p><br />
+
+                        <div class="post-details">
+                            <div class="post-data">
+                                @if (!Model.voteUps.Contains(postvm.post.Id))
+                                {
+                                    <a class="post-like post-btn">
+                                        <i href="#" onclick="Like(@postvm.post.Id)" class="bi bi-heart"></i> @postvm.post.Loves
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a class="post-like post-btn">
+                                        <i href="#" onclick="Dislike(@postvm.post.Id)" class="bi bi-heart-fill" style="color:red;"></i> @postvm.post.Loves
+                                    </a>
+                                }
+
+                                <div class="post-like"> <i class="bi bi-chat-dots"></i> @postvm.comments.Count</div>
+                            </div>
+                            @if (!Model.savedPosts.Contains(postvm.post.Id))
+                            {
+                                <a class="post-like post-btn">
+                                    <i href="#" onclick="AddToBookmarks(@postvm.post.Id)" class="bi bi-bookmark"></i>
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="post-like post-btn">
+                                    <i href="#" onclick="RemoveFromBookmarks(@postvm.post.Id)" class="bi bi-bookmark-fill" style="color:darkorange;"></i>
+                                </a>
+                            }
+
+                        </div>
+                        <div class="comment-container">
+
+                            <div class="add-comment">
+                                @{
+                                    ViewData["picSize"] = 50;
+                                }
+                                <partial name="_CircularProfilePic" model="@Model.pro" view-data="ViewData"></partial>
+
+                                <input id="@postvm.post.Id" type="text" placeholder="Add Comment ..." />
+                                <a style="cursor:pointer;" onclick="AddComment(@postvm.post.Id)">Comment</a>
+                            </div>
+
+                            <div class="comment-history">
+                                @for (int i = 0; i <= c; i++)
+                                {
+                                    <div class="comment-entry">
+                                        @{
+                                            ViewData["picSize"] = 50;
+                                        }
+                                        <partial name="_CircularProfilePic" model="@postvm.comments[i].User" view-data="ViewData"></partial>
+
+                                        <div class="name-comment">
+                                            <a class="link" asp-controller="Friends" asp-action="ViewFriend" asp-route-id="@postvm.comments[i].User.Id">
+                                                <label style="font-weight:bold;" class="name">@postvm.comments[i].User.Fullname</label>
+                                            </a>
+                                            <label class="comment-body">@postvm.comments[i].Body</label>
+                                        </div>
+                                    </div>
+                                }
+                                @if (postvm.comments.Count > 3)
+                                {
+                                    <div class="comment-entry" style="margin-right:1em; margin-top:1em;">
+                                        <a class="link" asp-controller="Posts" asp-action="Index" asp-route-id="@postvm.post.Id">Show All Comments</a>
+                                    </div>
+                                }
+
+                            </div>
 
 
+                        </div>
 
-    <div class="side-profile">
-        <button class="side-button">Button 1</button>
-        <button class="side-button">Button 2</button>
-        <button class="side-button">Button 3</button>
-        <button class="side-button">Button 4</button>
-        <button class="side-button">Button 5</button>
+                    </div>
+
+                }
+            }
+
+
+        </div>
+
     </div>
 
 </div>
+
+<script src="~/js/UploadBackgroundImage.js"></script>
+<script src="/js/CreatePost.js"></script>
+<script src="/js/Posts.js"></script>
+
+<script>
+
+    function show(c) {
+
+        let x = document.getElementById(c);
+
+        if (x.classList.contains("hide")) {
+            x.classList.add("show");
+            x.classList.remove("hide");
+        }
+        else {
+            x.classList.remove("show");
+            x.classList.add("hide");
+        }
+    }
+
+</script>

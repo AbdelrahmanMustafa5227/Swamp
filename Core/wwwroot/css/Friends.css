@@ -1,0 +1,102 @@
+﻿body {
+
+}
+
+
+.friends-main {
+    position:relative;
+}
+.friend-section {
+    margin-left: 3em;
+}
+.friend-subtitle {
+    margin-left: 6em;
+    color:rgb(100,100,100);
+    position:relative;
+    top:-0.6em;
+}
+
+.friend-container {
+    width: 90%;
+    margin: 0.5em auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0em;
+}
+.friend-entry {
+    width:46%;
+    height:7em;
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+    margin: 0.5em auto;
+    box-shadow:1px 1px 2px black;
+    background-color:rgb(250,250,250);
+    border-radius:10px;
+
+}
+    .friend-entry h6 {
+        width:30%;
+    }
+
+.friends-pro-img {
+    width: 93px;
+    height: 93px;
+    border-radius: 10px;
+    overflow: clip;
+    float: left;
+    clear: both;
+    background-color: lightsalmon;
+}
+
+.people-container {
+    width:90%;
+    height:23em;
+    background-color:rgb(250,250,250);
+    box-shadow:1px 1px 2px black;
+    margin: 1em auto;
+    display:flex;
+    flex-shrink:0;
+    overflow-x:auto;
+    margin-bottom:5em;
+}
+.people-entry {
+    min-width:22%;
+    height:92%;
+    background-color:white;
+    border-radius:12px;
+    box-shadow:1px 1px 2px black;
+    margin:auto 1em;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    align-items:center;
+}
+.people-pro-img {
+    margin-top:0.5em;
+    width: 200px;
+    height: 200px;
+    border-radius: 10px;
+    overflow: clip;
+    float: left;
+    clear: both;
+    background-color: lightsalmon;
+}
+.people-info {
+    text-align:center;
+    margin-bottom:1em;
+}
+.friend-link-name {
+    width:30%;
+    text-decoration:none;
+    color:black;
+    text-align:left;
+}
+    .friend-link-name h6 {
+        width:100%;
+    }
+
+.post-btn {
+    text-decoration: none;
+    color: black;
+}

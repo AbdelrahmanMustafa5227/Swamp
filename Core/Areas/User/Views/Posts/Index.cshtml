@@ -1,0 +1,97 @@
+﻿@model PostUserVM
+@using _Utilities;
+
+
+<div class="post">
+    <div class="poster-details">
+        <div class="img-name-time ">
+
+            @{
+                ViewData["picSize"] = 70;
+            }
+            <partial name="_CircularProfilePic" model="@Model.postvm.post.Poster" view-data="ViewData"></partial>
+
+            <div class="name-time">
+                <a class="link" asp-controller="Friends" asp-action="ViewFriend" asp-route-id="@Model.postvm.post.Poster.Id">
+                    <label class="name">@Model.postvm.post.Poster.Fullname</label>
+                </a>
+                <label class="dt">@DateCalculations.CalculateDifference(Model.postvm.post.PostDate)</label>
+            </div>
+
+        </div>
+
+    </div>
+
+    <h4>@Model.postvm.post.Title</h4>
+    <p>@Model.postvm.post.Body</p><br />
+
+    <div class="post-details">
+        <div class="post-data">
+            @if (!Model.IsLiked)
+            {
+                <a class="post-like post-btn">
+                    <i href="#" onclick="Like(@Model.postvm.post.Id)" class="bi bi-heart"></i> @Model.postvm.post.Loves
+                </a>
+            }
+            else
+            {
+                <a class="post-like post-btn">
+                    <i href="#" onclick="Dislike(@Model.postvm.post.Id)" class="bi bi-heart-fill" style="color:red;"></i> @Model.postvm.post.Loves
+                </a>
+            }
+
+            <div class="post-like"> <i class="bi bi-chat-dots"></i> @Model.postvm.comments.Count</div>
+        </div>
+        @if (!Model.IsSaved)
+        {
+            <a class="post-like post-btn">
+                <i href="#" onclick="AddToBookmarks(@Model.postvm.post.Id)" class="bi bi-bookmark"></i>
+            </a>
+        }
+        else
+        {
+            <a class="post-like post-btn">
+                <i href="#" onclick="RemoveFromBookmarks(@Model.postvm.post.Id)" class="bi bi-bookmark-fill" style="color:darkorange;"></i>
+            </a>
+        }
+
+    </div>
+    <div class="comment-container">
+
+        <div class="add-comment">
+            @{
+                ViewData["picSize"] = 50;
+            }
+            <partial name="_CircularProfilePic" model="@Model.user" view-data="ViewData"></partial>
+
+            <input id="@Model.postvm.post.Id" type="text" placeholder="Add Comment ..." />
+            <a style="cursor:pointer;" onclick="AddComment(@Model.postvm.post.Id)">Comment</a>
+        </div>
+
+        <div class="comment-history">
+            @foreach (Comment comment in Model.postvm.comments)
+            {
+                <div class="comment-entry">
+                    @{
+                        ViewData["picSize"] = 50;
+                    }
+                    <partial name="_CircularProfilePic" model="@comment.User" view-data="ViewData"></partial>
+
+                    <div class="name-comment">
+                        <a class="link" asp-controller="Friends" asp-action="ViewFriend" asp-route-id="@comment.User.Id">
+                            <label style="font-weight:bold;" class="name">@comment.User.Fullname</label>
+                        </a>
+                        <label class="comment-body">@comment.Body</label>
+                    </div>
+                </div>
+            }
+
+
+        </div>
+
+
+    </div>
+
+</div>
+
+<script src="/js/Posts.js"></script>

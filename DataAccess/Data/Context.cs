@@ -1,4 +1,5 @@
 ﻿using _Models;
+using _Models.RelationModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -21,8 +22,9 @@ namespace DataAccess.Data
         public DbSet<ApplicationUser> applicationUsers { get; private set; }
         public DbSet<Post> posts { get; private set; }
         public DbSet<User_Friend> user_Friends { get; private set; }
-
-
+        public DbSet<FriendRequest> friendRequests { get; private set; }
+        public DbSet<User_VoteUps> User_VoteUps { get; private set; }
+        public DbSet<Comment> comments { get; private set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -38,6 +40,26 @@ namespace DataAccess.Data
                 .WithMany(y => y.Users)
                 .HasForeignKey(j => j.FriendId);
 
+            builder.Entity<User_VoteUps>()
+                .HasOne(x => x.Post)
+                .WithMany(y => y.postsVotedUp)
+                .HasForeignKey(j => j.postId);
+
+            builder.Entity<User_VoteUps>()
+                .HasOne(x => x.user)
+                .WithMany(y => y.Voters)
+                .HasForeignKey(j => j.UserId);
+
+
+            builder.Entity<User_Posts>()
+                .HasOne(x => x.Post)
+                .WithMany(y => y.postsSaved)
+                .HasForeignKey(j => j.postId);
+
+            builder.Entity<User_Posts>()
+                .HasOne(x => x.user)
+                .WithMany(y => y.Saver)
+                .HasForeignKey(j => j.UserId);
         }
     }
 }

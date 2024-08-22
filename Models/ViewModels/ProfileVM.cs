@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using _Models.RelationModels;
+using Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,9 @@ namespace _Models.ViewModels
     public class ProfileVM
     {
         public ApplicationUser user { get; set; }
-        public Post? newpost { get; set; }
-        public IEnumerable<Post> postsHistory { get; set; }
+        public ApplicationUser pro {  get; set; }
+        public List<PostVM> posts { get; set; }
+        public IEnumerable<int> voteUps { get; set; }
+        public IEnumerable<int> savedPosts { get; set; }
     }
 }

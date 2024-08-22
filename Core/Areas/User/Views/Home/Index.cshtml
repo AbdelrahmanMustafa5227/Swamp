@@ -1,33 +1,142 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@model List<ApplicationUser>
+@using Newtonsoft.Json;
+@using System.Security.Claims;
+@using _Utilities;
+@model HomeVM
 @inject SignInManager<IdentityUser> SignInManager
+@inject IHttpContextAccessor contextAccessor;
+@inject IWebHostEnvironment web;
 @{
     ViewData["Title"] = "Home Page";
+
 }
 
-<div class="text-center main-home">
-    <h1 class="display-4">Welcome To Swamp!</h1>
 
-    @if (SignInManager.IsSignedIn(User))
-    {
-        <h2>People You may know</h2>
-        <div class="mayknow-con">
-            @foreach (var item in Model)
-            {
-                <div class="mayknow-body">
-                    <h3>@item.Fullname</h3>
-                    <div class="image-container">
-                        <img class="profile-pic" src="@item.ProfilePicUrl" />
+@if (SignInManager.IsSignedIn(User))
+{
+    Layout = "_Layout";
+    <div class="home-posts-container">
+        @foreach (PostVM postvm in Model.posts)
+        {
+            int c = postvm.comments.Count > 3 ? 2 : postvm.comments.Count - 1;
+
+            <div class="post">
+                <div class="poster-details">
+                    <div class="img-name-time ">
+
+                        @{ ViewData["picSize"] = 70; }
+                        <partial name="_CircularProfilePic" model="@postvm.post.Poster" view-data="ViewData"></partial>
+
+                        <div class="name-time">
+                            <a class="link" asp-controller="Friends" asp-action="ViewFriend" asp-route-id="@postvm.post.Poster.Id">
+                                <label class="name">@postvm.post.Poster.Fullname</label>
+                            </a>
+                            <label class="dt">@DateCalculations.CalculateDifference(postvm.post.PostDate)</label>
+                        </div>
+
                     </div>
-                    <a class="btn btn-primary mt-2" asp-action="Befriend" asp-route-id="@item.Id" >Add as a Friend</a>
+
                 </div>
-            }
+
+                <h4>@postvm.post.Title</h4>
+                <p>@postvm.post.Body</p><br />
+
+                <div class="post-details">
+                    <div class="post-data">
+                        @if (!Model.voteUps.Contains(postvm.post.Id))
+                        {
+                            <a class="post-like post-btn">
+                                <i href="#" onclick="Like(@postvm.post.Id)" class="bi bi-heart"></i> @postvm.post.Loves
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="post-like post-btn">
+                                <i href="#" onclick="Dislike(@postvm.post.Id)" class="bi bi-heart-fill" style="color:red;"></i> @postvm.post.Loves
+                            </a>
+                        }
+
+                        <div class="post-like"> <i class="bi bi-chat-dots"></i> @postvm.comments.Count</div>
+                    </div>
+                    @if (!Model.savedPosts.Contains(postvm.post.Id))
+                    {
+                        <a class="post-like post-btn">
+                            <i href="#" onclick="AddToBookmarks(@postvm.post.Id)" class="bi bi-bookmark"></i>
+                        </a>
+                    }
+                    else
+                    {
+                        <a class="post-like post-btn">
+                            <i href="#" onclick="RemoveFromBookmarks(@postvm.post.Id)" class="bi bi-bookmark-fill" style="color:darkorange;"></i>
+                        </a>
+                    }
+                    
+                </div>
+                <div class="comment-container">
+
+                    <div class="add-comment">
+                        @{ ViewData["picSize"] = 50; }
+                        <partial name="_CircularProfilePic" model="@Model.user" view-data="ViewData"></partial>
+
+                        <input id="@postvm.post.Id" type="text" placeholder="Add Comment ..." />
+                        <a style="cursor:pointer;" onclick="AddComment(@postvm.post.Id)">Comment</a>
+                    </div>
+
+                    <div class="comment-history">
+                        @for (int i = 0; i <= c; i++)
+                        {
+                            <div class="comment-entry">
+                                @{ ViewData["picSize"] = 50; }
+                                <partial name="_CircularProfilePic" model="@postvm.comments[i].User" view-data="ViewData"></partial>
+
+                                <div class="name-comment">
+                                    <a class="link" asp-controller="Friends" asp-action="ViewFriend" asp-route-id="@postvm.comments[i].User.Id">
+                                            <label style="font-weight:bold;" class="name">@postvm.comments[i].User.Fullname</label>
+                                    </a>
+                                    <label class="comment-body">@postvm.comments[i].Body</label>
+                                </div>
+                            </div>
+                        }
+                        @if (postvm.comments.Count > 3)
+                        {
+                            <div class="comment-entry" style="margin-right:1em; margin-top:1em;">
+                                <a class="link" asp-controller="Posts" asp-action="Index" asp-route-id="@postvm.post.Id">Show All Comments</a>
+                            </div>
+                        }
+
+                    </div>
+                    
+
+                </div>
+
+            </div>
+        }
+    </div>
+
+
+}
+
+
+else
+{
+    Layout = "_Layoutout";
+    <div class="home-background">
+        <div class="home-text-contanier">
+            <h1>
+                Experience a fresh way to <br />
+                <font style="color:rgb(142, 200, 61);">communicate with others</font>
+            </h1>
+            <h5>Bridge the gap between miles and moments. connect with friends and weave memories together!</h5>
+            <a class="text-white btn btn-success mt-3" id="login22" asp-area="Identity" asp-controller="Account" asp-action="Registers">Register</a>
+            <a class="text-white btn btn-primary mt-3 ms-3" id="login33" asp-area="Identity" asp-controller="Account" asp-action="Logins">Login</a>
         </div>
-    }
-    else
-    {
-        <h2>Join Swamp Community Now !</h2>
-    }
+
+        <img src="~/images/b.jpg" />
+    </div>
 
 
-</div>
+}
+
+
+
+<script src="/js/Posts.js"></script>

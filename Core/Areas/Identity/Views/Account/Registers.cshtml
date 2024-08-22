@@ -1,0 +1,65 @@
+﻿@using _Models.ViewModels
+@model RegisterationVM
+
+@{
+    Layout = "_Layoutout";
+}
+
+<div class="reg-main">
+    <div class="first-card">
+        <div class="container">
+            <form class="reg-form" id="registerForm" method="post">
+                <h2>Create Account</h2>
+                
+                <div class="form-floating mb-3">
+                    <i class="bi bi-person-fill icon"></i>
+                    <input asp-for="Fullname" class=" reg-input" aria-required="true" placeholder="Fullname" />
+                    <span asp-validation-for="Fullname" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <i class="bi bi-envelope-fill icon"></i>
+                    <input asp-for="Email" class=" reg-input" autocomplete="username" aria-required="true" placeholder="Email" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <i class="bi bi-key-fill icon"></i>
+                    <input asp-for="Password" class=" reg-input" autocomplete="new-password" aria-required="true" placeholder="Password" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <i class="bi bi-key-fill icon"></i>
+                    <input asp-for="ConfirmPassword" class=" reg-input" autocomplete="new-password" aria-required="true" placeholder="Confirm Password" />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <i class="bi bi-feather icon"></i>
+                    <input asp-for="Bio" class=" reg-input" aria-required="true" placeholder="Bio" />
+                    <span asp-validation-for="Bio" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <i class="bi bi-cake2-fill icon"></i>
+                    <input type="date" asp-for="Birthdate" class="reg-input" aria-required="true" placeholder="Birth Date" />
+                    <span asp-validation-for="Birthdate" class="text-danger"></span>
+                </div>
+
+                <button id="registerSubmit" type="submit" class="reg-btn">Register</button>
+            </form>
+        </div>
+
+    </div>
+    <div class="second-card">
+        <div class="container">
+            <h3>Welcome Back!</h3>
+            <p>  Already have an Account then Just Login </p>
+            <a asp-area="Identity" asp-controller="Account" asp-action="Logins">
+                <div class="log-btn">
+                    Login
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+                @section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+                }

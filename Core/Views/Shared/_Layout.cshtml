@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -9,47 +12,94 @@
     <link rel="stylesheet" href="~/css/profile.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/reg.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Core.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/Friends.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/navbar.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/Chat.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&family=New+Amsterdam&family=Radio+Canada+Big:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><img src="~/images/logo.png" width="50px" />Swamp</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Profile" asp-action="Index">Profile</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Friends" asp-action="Index">Friends</a>
-                        </li>
-                    </ul>
+        <nav class=" navbar-light bg-white border-bottom box-shadow nav-bar ">
+            <div class="nav-nav" style="width:100%;">
+
+                <div class="nav-container" style="width:30em;">
+
+                    <div>
+                        <a asp-area="User" asp-controller="Home" asp-action="Index"><img class="nav-logo" src="~/images/Logo.png" /></a>
+                    </div>
+                    <div>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <i class="bi bi-search" style="position:relative; left:19em;"></i>
+                            <input class="nav-srch" type="text" placeholder="Search Posts, Friends, etc..." />
+                        }
+                    </div>
+
+                </div>
+
+                <div class="nav-container">
                     <partial name="_LoginPartial"></partial>
                 </div>
+
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted bg-white">
-        <div class="container">
-            &copy; 2024 - Core - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+
+    <main role="main" class="main-body">
+        <div class="side-bar">
+            <a asp-controller="Home" asp-action="Index">
+                <div class="side-button"><i class="bi bi-house-fill"></i> Feed</div>
+            </a>
+            <a asp-controller="Posts" asp-action="SavedPosts">
+                <div class="side-button"> <i class="bi bi-bookmark-fill"></i> Saved Posts</div>
+            </a>
+            <a asp-controller="Friends" asp-action="Index">
+                <div class="side-button"><i class="bi bi-person-fill"></i> Friends</div>
+            </a>
+            <a asp-controller="Profile" asp-action="Edit">
+                <div class="side-button"> <i class="bi bi-gear-fill"></i> Edit Your Informations</div>
+            </a>
+            <div class="side-button">Coming Soon...... </div>
+            <div class="side-button">Coming Soon...... </div>
         </div>
+        <div style="width:20%"></div>
+        <div class="content">
+            @RenderBody()
+        </div>
+
+
+    </main>
+
+
+
+    <footer class=" footer text-white bg-dark footer-mine">
+        <div class="container">
+            &copy; 2024 - Swamp
+            <!--<div class="footer-flex">
+                <div>
+                    <label>LinkedIn : sulabeexsulabee@yahoo.com</label><br />
+                    <label>GitHub : sulabeexsulabee@gmail.com</label><br />
+                    <label>Yahoo : sulabeexsulabee@yahoo.com</label><br />
+                </div>
+                <div>
+                    <label>Phone : 01014973153</label>
+                </div>
+            </div>-->
+        </div>
+
+
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/Alert.js" asp-append-version="true"></script>
+    <script src="~/js/CropProfileImage.js" asp-append-version="true"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
