@@ -6,3 +6,9 @@ Technologies And Libraries Used :
   - Entity Framework
   - .NetCore Identity
   - SQL Server
+  - SignalR
+
+Demo
+https://www.youtube.com/watch?v=8SMVLth0L-M&t=35s
+Chat Demo
+https://www.youtube.com/watch?v=qJ4-WR4l-Zw
