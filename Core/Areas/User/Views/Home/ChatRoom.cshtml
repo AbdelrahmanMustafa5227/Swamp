@@ -1,19 +1,15 @@
-﻿
-<div class="main-chat">
-    <div class="chat-container">
+﻿@model ChatVM
 
+<div class="main-chat" id="chat" data-rid="@Model.Reciever.Id">
+    <div class="chat-container" id="chat-container">
         <ul id="messagesList"></ul>
-
     </div>
 
     <div class="send-bar">
         <input id="Msg" type="text" />
-        <button id="sendMsgBtn" onclick="sendMessage()">Send Message</button>
+        <button class="butn" id="sendMsgBtn" onclick="SendMsg('@Model.Sender.Id','@Model.Reciever.Id')">Send</button>
     </div>
 </div>
-
-
-
 
 
 

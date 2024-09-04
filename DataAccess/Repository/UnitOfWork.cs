@@ -18,6 +18,7 @@ namespace _DataAccess.Repository
         public User_FriendRepo UserFriendRepo { get; private set; }
         public User_VoteUpsRepo UserVoteUpsRepo { get; private set; }
         public User_PostsRepo UserPostsRepo { get; private set; }
+        public UnreadMessagesRepo UnreadMessagesRepo { get; private set; }
 
         public UnitOfWork(Context db)
         {
@@ -29,6 +30,7 @@ namespace _DataAccess.Repository
             UserVoteUpsRepo = new User_VoteUpsRepo(_db);
             UserPostsRepo = new User_PostsRepo(_db);
             CommentRepo = new CommentRepo(_db);
+            UnreadMessagesRepo = new UnreadMessagesRepo(_db);
         }
 
         public void Save()

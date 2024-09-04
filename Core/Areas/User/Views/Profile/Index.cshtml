@@ -82,7 +82,7 @@
                             </div>
                             <i style="cursor:pointer;" onclick="show(@postvm.post.Id)" class="bi bi-three-dots"></i>
                         </div>
-                        <ul class="dropdown hide" id="@postvm.post.Id">
+                        <ul class="dropdown hide" id="@(postvm.post.Id.ToString() + "c")">
                             <li> <a class="link" asp-controller="Posts" asp-action="EditPost" asp-route-id="@postvm.post.Id"> <i class="bi bi-pencil-fill"></i> Edit </a> </li>
                             <li> <a class="link" asp-controller="Posts" asp-action="DeletePost" asp-route-id="@postvm.post.Id"> <i class="bi bi-trash-fill"></i> Delete</a> </li>
                         </ul>
@@ -181,7 +181,7 @@
 
     function show(c) {
 
-        let x = document.getElementById(c);
+        let x = document.getElementById(c + "c");
 
         if (x.classList.contains("hide")) {
             x.classList.add("show");

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace _Models
 {
-    public class FriendRequest
+    public class UnreadMessages
     {
         public int Id { get; set; }
 
@@ -16,7 +16,7 @@ namespace _Models
         [ForeignKey("FromId")]
         public ApplicationUser FromUser { get; set; }
 
-        
+
         public string ToId { get; set; }
         [ForeignKey("ToId")]
         public ApplicationUser ToUser { get; set; }

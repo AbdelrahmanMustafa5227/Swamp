@@ -8,6 +8,7 @@
     string fullImagePath = System.IO.Path.Combine(web.WebRootPath, path.Substring(1));
     (double DifferenceInPixels, bool isLandscape) = ImgCalculations.GetDifferenceForAdjust(fullImagePath, 300);
     string y = string.Concat((DifferenceInPixels + 300).ToString(), "px");
+    Layout = "_Layout";
 }
 
 <div class="adjust-main">
@@ -45,8 +46,6 @@
         </div>
 
     </div>
-
-
 
 </div>
 

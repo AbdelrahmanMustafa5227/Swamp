@@ -517,7 +517,7 @@
 
 .adjust-main {
     width: 75%;
-    height: 30em;
+    height: fit-content;
     margin: 0 auto;
     display: flex;
     flex-direction: column;

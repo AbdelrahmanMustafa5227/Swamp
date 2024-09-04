@@ -26,7 +26,7 @@
             <h2>@Model.user.Fullname</h2>
             <p>@Model.user.Bio</p>
             <div style="display:flex;justify-content:space-between; width:12em;">
-                <a asp-controller="Home" asp-action="ChatRoom" class="btn btn-primary">Message</a>
+                <a asp-controller="Home" asp-action="ChatRoom" asp-route-id="@Model.user.Id" class="btn btn-primary">Message</a>
                 <a asp-action="RemoveFromFriends" asp-route-id="@Model.user.Id" class="btn btn-danger">Unfriend</a>
             </div>
             

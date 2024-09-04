@@ -16,6 +16,7 @@ namespace _DataAccess.Repository.IRepository
         public User_FriendRepo UserFriendRepo { get; }
         public User_VoteUpsRepo UserVoteUpsRepo { get; }
         public User_PostsRepo UserPostsRepo { get; }
+        public UnreadMessagesRepo UnreadMessagesRepo { get; }
         public void Save();
 
     }

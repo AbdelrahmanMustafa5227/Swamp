@@ -75,9 +75,14 @@ namespace Core.Areas.User.Controllers
         }
 
 
-        public IActionResult ChatRoom()
+        public IActionResult ChatRoom(string id)
         {
-            return View();
+            ChatVM vm = new ChatVM
+            {
+                Sender = _unitOfWork.ApplicationRepo.Get(x => x.Id == _userService.GetCurrentUserId()),
+                Reciever = _unitOfWork.ApplicationRepo.Get(x => x.Id == id)
+            };
+            return View(vm);
         }
 
         public IActionResult CheckName(string Fullname , string Bio) 

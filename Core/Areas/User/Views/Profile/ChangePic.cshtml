@@ -8,6 +8,7 @@
     string fullImagePath = System.IO.Path.Combine(web.WebRootPath, path.Substring(1));
     (double DifferenceInPixels, bool isLandscape) = ImgCalculations.GetDifferenceForAdjust(fullImagePath, 400);
     string y = string.Concat((DifferenceInPixels + 400).ToString(),"px");
+    Layout = "_Layout";
 }
 <h4 class="change-pic-title">Change Profile Picure</h4>
 <label class="change-pic-or">OR</label>

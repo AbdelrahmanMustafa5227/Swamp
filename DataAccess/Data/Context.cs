@@ -25,6 +25,7 @@ namespace DataAccess.Data
         public DbSet<FriendRequest> friendRequests { get; private set; }
         public DbSet<User_VoteUps> User_VoteUps { get; private set; }
         public DbSet<Comment> comments { get; private set; }
+        public DbSet<UnreadMessages> unreadMessages { get; private set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
